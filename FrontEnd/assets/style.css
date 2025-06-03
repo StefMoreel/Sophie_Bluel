@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: rgba(255, 254, 248, 1);
 }
 ol, ul {
 	list-style: none;
@@ -53,12 +54,14 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 
+
 }
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
 }
+
 section {
 	margin: 50px 0
 }
@@ -85,15 +88,24 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
+nav{
+	display: flex;
+
+}
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
 
+
 }
 nav li {
-	padding: 0 10px;
+	padding: 0 30px;
 	font-size: 1.2em;
+}
+.insta-logo{
+	width: 22px;
 }
 
 li:hover {
@@ -102,14 +114,16 @@ li:hover {
 #introduction {
 	display: flex;
 	align-items: center;
+	margin: 100px;
+	gap: 58px;
 }
 #introduction figure {
-	flex: 1
+	width: 50%;
 }
 #introduction img {
 	display: block;
 	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
@@ -121,6 +135,9 @@ li:hover {
 
 #introduction p {
 	margin-bottom: 0.5em;
+}
+#portfolio{
+	margin: 150px 100px 50px 100px;
 }
 #portfolio h2 {
 	text-align: center;
@@ -139,8 +156,8 @@ li:hover {
 
 }
 #contact {
-	width: 50%;
-margin: auto;
+	width: 30%;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -151,14 +168,14 @@ margin: auto;
 }
 #contact form {
 	text-align: left;
-	margin-top:30px;
+	margin-top: 10px;
 	display: flex;
 	flex-direction: column;
 }
 
 #contact input {
-	height: 50px;
-	font-size: 1.2em;
+	height: 40px;
+	font-size: 0.875em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -191,7 +208,7 @@ footer nav ul {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	padding: 50px;
+	padding: 30px 0px 50px 0px;
 	gap: 10px;
 }
 
@@ -199,7 +216,7 @@ footer nav ul {
 	display: flex;
 	justify-content: center;
 	border: #1D6154 solid 1px;
-	border-radius: 20px;
+	border-radius: 3rem;
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 16px;
@@ -213,5 +230,11 @@ footer nav ul {
 	background-color: #1D6154;
 	color: white;
 	
+}
+button.btn-filters.all{
+	padding: 8px 30px;
+}
+button.btn-filters.cat-objets{
+	padding: 8px 20px;
 }
 
