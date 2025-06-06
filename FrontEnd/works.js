@@ -93,3 +93,36 @@ function addButtonFilter (parent, text, id){
     });
 
  }
+
+const isLoggedIn = localStorage.getItem("token");
+
+const linkLogin = document.querySelector(".link-login");
+
+if (isLoggedIn){
+    linkLogin.textContent = "logout";
+    linkLogin.href="#"
+    linkLogin.addEventListener("click", function(){
+        localStorage.removeItem("token");
+        window.location.reload();
+    })
+
+    //Création de la balise a
+    const modifierLink = document.createElement("a");
+    //Ajout de l'attribut du lien a
+    modifierLink.href = "modal.html"
+    //Création de la balise i pour l'icone
+    const iconeModifier = document.createElement("i");
+    //Ajout de l'attribut class de la balise i pour afficher l'icone
+    iconeModifier.className = "fa-regular fa-pen-to-square";
+    //Création de la balise p
+    const textModifierLink = document.createElement("p");
+    //Ajout du texte à afficher dans la balise p
+    textModifierLink.innerText = "modifier";
+    //Ciblage de la balise parente
+    const divPortfolioSection = document.querySelector(".title-portfolio")
+    //Attachement des baslisent créées au parent
+    divPortfolioSection.appendChild(modifierLink);
+    modifierLink.appendChild(iconeModifier);
+    modifierLink.appendChild(textModifierLink);
+
+}
