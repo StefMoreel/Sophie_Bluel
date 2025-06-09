@@ -14,13 +14,14 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
+
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
-			<li><a class="link-login" href="login.html">login</a></li>
+			<li><a class="link-login" href="login.html">login</a></li><!--login devient logout après la connexion réussie-->
 			<li><img class=insta-logo src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -39,19 +40,29 @@
 	</section>
 	<section id="portfolio">
 		<div class="title-portfolio">
-		<h2>Mes projets</h2>
-		<!-- <a href="#modal">
-			<i class="fa-regular fa-pen-to-square"></i>
-			<p>modifier</p>
-		</a> -->
+			<h2>Mes projets</h2>
+			<!--Affichage du lien pour accéder à la modale d'ajout et de suppression de travaux-->
 		</div>
 		<div class="filters">
-
+			<!--Affichage des boutons filtres-->
 		</div>
 		<div class="gallery">
-			
+			<!--Affichage de la gallerie-->
 		</div>
-	</section>
+		<div id="modal" aria-hidden="true" role="dialog" style="display:none;" aria-labelledby="title-modal">
+			<div class="modal-overlay"></div>
+				<div class="modal-1-container">
+					<button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+					<div class="title-modal-1">
+						<p>Galerie photo</p>
+					</div>
+					<div class="gallery gallery-modal-1">
+						<!--Affichage de la gallerie-->
+					</div>
+					<div class="border"></div>
+					<input type="submit" value="Ajouter une photo" class=".btn-open-modal-2">
+				</div>
+			</div>
 	<section id="contact-login">
 		<h2>Contact</h2>
 		<p>Vous avez un projet ? Discutons-en !</p>
@@ -65,11 +76,6 @@
 			<input type="submit" value="Envoyer">
 		</form>
 	</section>
-	<section id="modal">
-		<aside>
-
-		</aside>
-	</section>
 </main>
 
 <footer>
@@ -79,6 +85,7 @@
 		</ul>
 	</nav>
 </footer>
+
 	<script type="module" src="works.js">
 
 	</script>

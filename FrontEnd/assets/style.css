@@ -49,7 +49,7 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
+	max-width: 1440px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
@@ -196,7 +196,7 @@ li:hover {
 	flex-direction: column;
 }
 
-#contact-login input{
+#contact-login input, #modal input{
 	height: 36px;
 	font-size: 0.875em;
 	border: none;
@@ -223,6 +223,7 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+
 .login{
 	margin-top: 150px;
 }
@@ -276,4 +277,88 @@ footer nav{
 }
 footer li{
 		font-size: 14px;
+}
+
+#modal{
+
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	left: 0;
+	justify-content: center;
+	z-index: 1;
+}
+.modal-overlay{
+
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.3);
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+
+}
+.modal-1-container{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	max-width: 530px;
+	min-width: 300px;
+	min-height: 590px;
+	max-height: 600px;
+	padding: 45px 50px 45px 50px;
+	background: #fff;
+	border-radius: 10px;
+	position: relative;
+	top: 75%;
+	
+}
+
+.btn-close-modal{
+	border: none;
+	background: none;
+	padding: 0;
+	position: absolute;
+	cursor: pointer;
+	top: 25px;
+	right: 30px;
+	
+}
+
+.title-modal-1{
+	display: flex;
+	justify-content: center;
+	font-size: 26px;
+	text-align: center;
+
+}
+
+.border{
+	border: solid 1px rgba(179, 179, 179, 1);
+	margin: 0px 55px 0px 55px;
+}
+
+.btn-open-modal-2{
+	width: 237px;
+	margin: 0 auto;
+	border: none;
+	display: flex;
+	justify-content: center;
+	padding: 10px;
+}
+.gallery-modal-1{
+	display: flex;
+	flex-wrap: wrap;
+	box-sizing: border-box;
+	gap: 25px 10px;
+	padding: 0px 55px 0 55px;
+}
+.gallery-modal-1 figcaption{
+	display: none;
+}
+.gallery-modal-1 img{
+	width: 4.75rem;
 }

@@ -110,6 +110,8 @@ if (isLoggedIn){
     const modifierLink = document.createElement("a");
     //Ajout de l'attribut du lien a
     modifierLink.href = "modal.html"
+    //Ajout de l'attribut de classe de la balise a pour identifier la fonction du lien
+    modifierLink.className = "btn-open-modal-1"
     //Création de la balise i pour l'icone
     const iconeModifier = document.createElement("i");
     //Ajout de l'attribut class de la balise i pour afficher l'icone
