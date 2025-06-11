@@ -49,7 +49,7 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1440px;
+	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
@@ -150,19 +150,22 @@ li:hover {
 .title-portfolio{
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: baseline;
 	gap: 30px;
+	padding-bottom: 50px;
 }
-.title-portfolio i{
+.openModal{
+	display: flex;
+}
+.openModal i{
 	display: block;
 	width: 15.58px;
 	height: 15.58px;
 }
-.title-portfolio a{
-	display: flex;
-	align-items: flex-end;
-	gap: 10px;
+.openModal button{
 	font-size: 14px;
+	border: none;
+	background: none;
 }
 .gallery {
 	width: 100%;
@@ -170,6 +173,7 @@ li:hover {
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+	padding-top: 50px;
 }
 
 .gallery img {
@@ -243,12 +247,15 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+.filters{
+	display: flex;
+	justify-content: center;
+}
 
 .filters ul{
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	padding: 50px 0px 50px 0px;
 	gap: 10px;
 }
 
@@ -313,7 +320,7 @@ footer li{
 	background: #fff;
 	border-radius: 10px;
 	position: relative;
-	top: 75%;
+	top: -230%;
 	
 }
 
@@ -349,16 +356,16 @@ footer li{
 	justify-content: center;
 	padding: 10px;
 }
-.gallery-modal-1{
+.gallery-modal{
 	display: flex;
 	flex-wrap: wrap;
 	box-sizing: border-box;
 	gap: 25px 10px;
 	padding: 0px 55px 0 55px;
 }
-.gallery-modal-1 figcaption{
+.gallery-modal figcaption{
 	display: none;
 }
-.gallery-modal-1 img{
+.gallery-modal img{
 	width: 4.75rem;
 }
