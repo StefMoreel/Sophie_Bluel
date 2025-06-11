@@ -14,7 +14,7 @@
     return repJson;
  }
     //Stockage de la réponse json à GET WORKS
-    const works = await callApiWorks();
+    let works = await callApiWorks();
     //Appel de la fonction d'affichage de chaque work
     showWorks(works, mainGallery);
 
@@ -200,18 +200,27 @@ function OnEventUserCloseModal(event){
 
 }
 
-function onClickBtnTrashDeleteWork(event, id){
-    const workId = parseInt(event.currentTarget.attributes.name.value);
+async function onClickBtnTrashDeleteWork(event, id){
+    const workToDelete = parseInt(event.currentTarget.attributes.name.value);
     try{ 
-        const reponse = fetch(`http://localhost:5678/api/works/${id}`,{
+        const reponse = await fetch("http://localhost:5678/api/works/${id}",{
             method : "DELETE",
-            headers : {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4'}
-        });
+            headers : {
+                'accept': '*/*',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0OTY2Mjk0MSwiZXhwIjoxNzQ5NzQ5MzQxfQ.BBGO6dCXCKHFujQfSP9-ZIe98jNsC2bO4dg5y7259k4',
+                }
+
+            });
         if (reponse.ok){
-            const workToRemove = document.getElementById(`${id}`);
-            if (workToRemove){
-                workToRemove.remove();
+            const worksUpdatedWithoutDeleteWork = [];
+            for (let i = 0 ; i < works.length ; i++){
+                if (works[i].id != workToDelete){
+                    worksUpdatedWithoutDeleteWork.push(works[i])
+                }
             }
+            works = worksUpdatedWithoutDeleteWork; 
+            showWorks(works, mainGallery);
+            showWorks(works, modalGallery);
         }else{
             alert("Erreur lors de la suppression de l'élément");
         }
