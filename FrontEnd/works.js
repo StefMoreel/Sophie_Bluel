@@ -25,6 +25,7 @@ function addWork(work, galleryDiv){
     // Création des éléments dans le DOM
     // Création de la balise figure
     const figureElement = document.createElement("figure");
+    figureElement.setAttribute("id", work.id);
     // Création de la balise img (enfant de figure)
     const imgElement = document.createElement("img");
     // Affichage et identification de l'élément dans la baslise img depuis la source dans la route de l'API
@@ -33,6 +34,16 @@ function addWork(work, galleryDiv){
     const figcaptionElement = document.createElement("figcaption");
     // Affichage et identification de l'élément dans le texte de la balise figcaption depuis la source dans la route de l'API
     figcaptionElement.innerText = work.title;
+    //Création du bouton trash
+    const btnTrash = document.createElement("button")
+    btnTrash.className = "btn-trash";
+    btnTrash.setAttribute("name", work.id);
+    //Création de la balise i (icone trash)
+    const trashIcon = document.createElement("i");
+    trashIcon.className = "fa-solid fa-trash-can icon-trash";
+    btnTrash.appendChild(trashIcon);
+    btnTrash.addEventListener("click", onClickBtnTrashDeleteWork); 
+
 // Rattacher éléments créés au parent
 
     //Insertion de la balise figure => enfant de gallery
@@ -41,6 +52,9 @@ function addWork(work, galleryDiv){
     figureElement.appendChild(imgElement);
     //Insertion de la balise figcation + affichage élément => enfant de figure
     figureElement.appendChild(figcaptionElement);
+    figureElement.appendChild(btnTrash);
+
+
  }
 
 
@@ -94,15 +108,22 @@ function addButtonFilter (parent, text, id){
     parent.appendChild(liElement);
     //Ciblage de l'élement li et insertion de button
     liElement.appendChild(buttonElement);
-      
-    buttonElement.addEventListener("click", function(event){
+    //Ajout d'un listener clic sur le bouton filtre  
+    buttonElement.addEventListener("click", 
+        //Après le clic, stockage de la valeur de l'attribut name du bouton
+        function(event){
         const buttonName = parseInt(event.currentTarget.attributes.name.value);
+            //Si l'attribut name du bouton est = 0, affichage de tous les travaux dans la gallerie principale
             if(buttonName === 0){
                 showWorks(works, mainGallery);
+            //sinon, on parcours chaque travail et on retourne l'ID de la catégorie pour chacun 
+            //qui sera égal à l'attribut name de chaque bouton 
             }else{
                 const categoriesFiltered = works.filter(function(work){
                     return work.categoryId === buttonName;   
                 })
+               
+            //Affichage dans la gallerie principale des travaux filtrés par catégorie
             showWorks(categoriesFiltered, mainGallery);
             };
     });
@@ -158,19 +179,50 @@ if (isLoggedIn){
         })
 
         const btnCloseModal = document.querySelector(".btn-close-modal");
-        btnCloseModal.addEventListener("click", closeModal);
+        btnCloseModal.addEventListener("click", OnEventUserCloseModal);
         const overlayCloseModal = document.querySelector(".modal-overlay");
-        overlayCloseModal.addEventListener("click", closeModal);
+        overlayCloseModal.addEventListener("click", OnEventUserCloseModal);
+        window.addEventListener("keydown", function(event){
+            if (event.key === "Escape"){
+                OnEventUserCloseModal(event)
+            }
+        });
 
     showWorks(works, modalGallery);
 
 }
 
-function closeModal(event){
+function OnEventUserCloseModal(event){
             event.preventDefault();
             modal.style.display = "none";
             modal.setAttribute('aria-hidden', 'true');
             modal.removeAttribute('aria-modal');
 
-}   
- 
+}
+
+function onClickBtnTrashDeleteWork(event, id){
+    const workId = parseInt(event.currentTarget.attributes.name.value);
+    try{ 
+        const reponse = fetch(`http://localhost:5678/api/works/${id}`,{
+            method : "DELETE",
+            headers : {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4'}
+        });
+        if (reponse.ok){
+            const workToRemove = document.getElementById(`${id}`);
+            if (workToRemove){
+                workToRemove.remove();
+            }
+        }else{
+            alert("Erreur lors de la suppression de l'élément");
+        }
+    }
+    catch(error){
+        alert("erreur réseau");
+    }    
+}
+
+
+
+
+
+

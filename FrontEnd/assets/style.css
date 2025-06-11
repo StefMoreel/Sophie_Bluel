@@ -287,11 +287,11 @@ footer li{
 }
 
 #modal{
-
 	display: flex;
 	width: 100vw;
 	height: 100vh;
 	position: absolute;
+	top: 0;
 	left: 0;
 	justify-content: center;
 	z-index: 1;
@@ -303,8 +303,8 @@ footer li{
 	height: 100%;
 	background: rgba(0, 0, 0, 0.3);
 	top: 0;
-	left: 0;
-	box-sizing: border-box;
+
+
 
 }
 .modal-1-container{
@@ -319,8 +319,9 @@ footer li{
 	padding: 45px 50px 45px 50px;
 	background: #fff;
 	border-radius: 10px;
-	position: relative;
-	top: -230%;
+	position: absolute;
+	top: 65%;
+
 	
 }
 
@@ -332,7 +333,7 @@ footer li{
 	cursor: pointer;
 	top: 25px;
 	right: 30px;
-	
+	font-size: 12px;
 }
 
 .title-modal-1{
@@ -347,21 +348,20 @@ footer li{
 	border: solid 1px rgba(179, 179, 179, 1);
 	margin: 0px 55px 0px 55px;
 }
+#modal input{
+	margin: 0;
+	align-self: center;
+	width: 45%;
 
-.btn-open-modal-2{
-	width: 237px;
-	margin: 0 auto;
-	border: none;
-	display: flex;
-	justify-content: center;
-	padding: 10px;
 }
+
 .gallery-modal{
 	display: flex;
 	flex-wrap: wrap;
 	box-sizing: border-box;
 	gap: 25px 10px;
 	padding: 0px 55px 0 55px;
+	margin-bottom: 30px;
 }
 .gallery-modal figcaption{
 	display: none;
@@ -369,3 +369,26 @@ footer li{
 .gallery-modal img{
 	width: 4.75rem;
 }
+
+.gallery i{
+	display: none;
+}
+
+.gallery-modal figure{
+	position: relative;
+	display: inline-block;
+}
+
+.btn-trash {
+	border: none;
+	position: absolute;
+	top: 6px;
+	right: 5px;
+	color: #fff;
+	font-size: 10px;
+	border-radius: 2px;
+	background-color: black;
+	padding: 3px 4px 3.5px 4px;
+	cursor: pointer;
+}
+
