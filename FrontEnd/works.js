@@ -42,8 +42,9 @@ function addWork(work, galleryDiv){
     const trashIcon = document.createElement("i");
     trashIcon.className = "fa-solid fa-trash-can icon-trash";
     btnTrash.appendChild(trashIcon);
-    btnTrash.addEventListener("click", onClickBtnTrashDeleteWork); 
+    btnTrash.addEventListener("click", onClickBtnTrashDeleteWork);
 
+    
 // Rattacher éléments créés au parent
 
     //Insertion de la balise figure => enfant de gallery
@@ -88,21 +89,22 @@ async function callApiCategories() {
     //Appel de la fonction pour ajouter 1 bouton "Tous" à la balise ul
     addButtonFilter(ulElement,"Tous", 0);
 
+     const selectCategorieForm = document.querySelector("#categories-list");
 
     for (let i = 0; i < categories.length ; i++){
         const category = categories[i]; 
     addButtonFilter(ulElement, category.name, category.id);
-
+    createCategorieOptionToSelectInFormPostWork(selectCategorieForm, category.name, category.id);
     }
 
-function addButtonFilter (parent, text, id){      
+function addButtonFilter (parent, categoryName, id){      
     //Création des éléments pour les boutons dynamiques dans le DOM
     //Création de la balise li
     const liElement = document.createElement("li");
     //création de la balise button
     const buttonElement = document.createElement("button");
     //Affichage du texte du bouton
-    buttonElement.innerText = text;
+    buttonElement.innerText = categoryName;
     buttonElement.setAttribute("name", id)
     //Ciblage de l'élement ul et insertion de li
     parent.appendChild(liElement);
@@ -133,6 +135,8 @@ function addButtonFilter (parent, text, id){
 const isLoggedIn = localStorage.getItem("token");
 const linkLogin = document.querySelector(".link-login");
 const modal = document.querySelector("#modal");
+const modalOne = document.querySelector("#modal-1");
+const modalTwo = document.querySelector("#modal-2");
 
 if (isLoggedIn){
     linkLogin.textContent = "logout";
@@ -165,8 +169,6 @@ if (isLoggedIn){
     divOpenModal.appendChild(btnOpenModal);
 
     
-
-
     //Clblage du lien d'ouverture de la modale : bouton "modifier"
         btnOpenModal.addEventListener("click", function(event){
             event.preventDefault();
@@ -174,6 +176,10 @@ if (isLoggedIn){
             modal.style.display = null;
             modal.removeAttribute('aria-hidden');
             modal.setAttribute('aria-modal', 'true');
+            modalTwo.classList.remove("active");
+            modalOne.classList.add("active");
+
+
             
 
         })
@@ -190,13 +196,38 @@ if (isLoggedIn){
 
     showWorks(works, modalGallery);
 
+const btnPostWork = document.querySelector(".btn-open-modal-2");
+btnPostWork.addEventListener("click", function(event){
+    event.preventDefault();
+    modalOne.classList.remove("active");
+    modalTwo.classList.add("active");
+
+});
+const btnReturn = document.querySelector(".btn-return-modal-1");
+btnReturn.addEventListener("click", function() {
+  modalTwo.classList.remove("active");
+  modalOne.classList.add("active");
+
+});
+
 }
 
-function OnEventUserCloseModal(event){
+function createCategorieOptionToSelectInFormPostWork(parent, categoryName, id){
+    
+    const optionCategoryElement = document.createElement("option");
+    optionCategoryElement.value = id;
+    optionCategoryElement.innerText = categoryName;
+   
+    parent.appendChild(optionCategoryElement);
+
+}
+
+    function OnEventUserCloseModal(event){
             event.preventDefault();
             modal.style.display = "none";
             modal.setAttribute('aria-hidden', 'true');
             modal.removeAttribute('aria-modal');
+
 
 }
 
@@ -229,6 +260,7 @@ async function onClickBtnTrashDeleteWork(event, id){
         alert("erreur réseau");
     }    
 }
+
 
 
 
