@@ -132,6 +132,8 @@ function addButtonFilter (parent, categoryName, id){
 
  }
 
+//Affichage de la page après la connexion
+
 const isLoggedIn = localStorage.getItem("token");
 const linkLogin = document.querySelector(".link-login");
 const modal = document.querySelector("#modal");
@@ -183,11 +185,18 @@ if (isLoggedIn){
             
 
         })
+        // Action de fermeture de la modale 1 et 2
 
-        const btnCloseModal = document.querySelector(".btn-close-modal");
-        btnCloseModal.addEventListener("click", OnEventUserCloseModal);
+        //Au clic sur la croix modale 1
+        const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
+        btnCloseModalOne.addEventListener("click", OnEventUserCloseModal);
+        //Au clic sur la croix modale 2
+        const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
+        btnCloseModalTwo.addEventListener("click", OnEventUserCloseModal);
+        //Au clic à l'extérieur de la modale
         const overlayCloseModal = document.querySelector(".modal-overlay");
         overlayCloseModal.addEventListener("click", OnEventUserCloseModal);
+        //A l'appui sur la touche échap du clavier
         window.addEventListener("keydown", function(event){
             if (event.key === "Escape"){
                 OnEventUserCloseModal(event)
@@ -196,22 +205,30 @@ if (isLoggedIn){
 
     showWorks(works, modalGallery);
 
-const btnPostWork = document.querySelector(".btn-open-modal-2");
-btnPostWork.addEventListener("click", function(event){
-    event.preventDefault();
-    modalOne.classList.remove("active");
-    modalTwo.classList.add("active");
+    //Action d'ouverture de la modale 2 au clic sur le bouton "Ajouter photo"
+    const btnPostWork = document.querySelector(".btn-open-modal-2");
+    btnPostWork.addEventListener("click", function(event){
+        event.preventDefault();
+        modalOne.classList.remove("active");
+        modalTwo.classList.add("active");
 
-});
-const btnReturn = document.querySelector(".btn-return-modal-1");
-btnReturn.addEventListener("click", function() {
-  modalTwo.classList.remove("active");
-  modalOne.classList.add("active");
+    });
 
-});
+    //Action de retour vers la modale 1
+    const btnReturn = document.querySelector(".btn-return-modal-1");
+    btnReturn.addEventListener("click", function() {
+    modalTwo.classList.remove("active");
+    modalOne.classList.add("active");
+    //Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
+    addPhotoDiv.replaceChild(uploadContainer, previewContainer);
+    //Remise à 0 de la sélection de la précédente photo
+    uploadContainer.querySelector("input[type=file]").value = "";
+
+    });
 
 }
 
+//Dans la modale 2 : ajout des catégories dans la liste d'option
 function createCategorieOptionToSelectInFormPostWork(parent, categoryName, id){
     
     const optionCategoryElement = document.createElement("option");
@@ -222,36 +239,59 @@ function createCategorieOptionToSelectInFormPostWork(parent, categoryName, id){
 
 }
 
-    function OnEventUserCloseModal(event){
-            event.preventDefault();
-            modal.style.display = "none";
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-
-
+//Fonction qui décrit l'évenement suite au clic pour fermer les modales
+function OnEventUserCloseModal(event){
+        event.preventDefault();
+        modal.style.display = "none";
+        modal.setAttribute('aria-hidden', 'true');
+        modal.removeAttribute('aria-modal');
 }
 
+//Fonction qui décrit l'évenement suite au clic sur le bouton poubelle de la modale 1
+
+//
 async function onClickBtnTrashDeleteWork(event, id){
+    //Message de demande de confirmation avant suppression
+    const isConfirmed = window.confirm("Etes-vous sûr de vouloir supprimer cet élément?")
+    //Si clic sur "annuler" le code s'arrête
+    if (!isConfirmed){
+        return;
+    }
+    //Stockage et renvoie de la string en entier de la valeur du nom de l'attribut du work qui est cliqué
     const workToDelete = parseInt(event.currentTarget.attributes.name.value);
+    
+    
     try{ 
-        const reponse = await fetch("http://localhost:5678/api/works/${id}",{
+        //Récupération du token stocké en local
+        const token = localStorage.getItem("token");
+        //Appel de la route DELETE de l'API
+        const reponse = await fetch(`http://localhost:5678/api/works/${id}`,{
             method : "DELETE",
             headers : {
                 'accept': '*/*',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0OTY2Mjk0MSwiZXhwIjoxNzQ5NzQ5MzQxfQ.BBGO6dCXCKHFujQfSP9-ZIe98jNsC2bO4dg5y7259k4',
+                'Authorization': `Bearer ${token}`,
                 }
 
             });
+        //Si l'API renvoie OK    
         if (reponse.ok){
+            //Déclaration d'une nouvelle liste
             const worksUpdatedWithoutDeleteWork = [];
+            //Boucle dans la liste des works
             for (let i = 0 ; i < works.length ; i++){
+                //Si l'id d'un work est différent de celui qui doit être supprimé
                 if (works[i].id != workToDelete){
+                    //Mise à jour de la nouvelle liste avec l'id du work
                     worksUpdatedWithoutDeleteWork.push(works[i])
                 }
             }
+            //Nouvelle déclaration de works qui correspond à la nouvelle liste
             works = worksUpdatedWithoutDeleteWork; 
+            //Affichage de la liste MAJ dans la gallerie principale
             showWorks(works, mainGallery);
+            ////Affichage de la liste MAJ dans la gallerie de la modale
             showWorks(works, modalGallery);
+        //Sinon alerte d'erreur    
         }else{
             alert("Erreur lors de la suppression de l'élément");
         }
@@ -260,10 +300,35 @@ async function onClickBtnTrashDeleteWork(event, id){
         alert("erreur réseau");
     }    
 }
+    
 
+const addPhotoDiv = document.querySelector(".add-photo-file");
+const image = document.createElement("img");
+image.className = "selected-image";
+const previewContainer = document.createElement("div");
+const uploadContainer = addPhotoDiv.querySelector(".upload-container");
 
+function previewImage(eventOnPreview){
+    const input = eventOnPreview.target;
+    const selectedFile = input.files[0];
+    if (!input.files[0]){
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function (eventOnPreview){
+        image.src = eventOnPreview.target.result;
+    }
+    reader.readAsDataURL(selectedFile);
 
+replaceUploadContainerToPreviewContainer(previewContainer, uploadContainer);
+}
 
+addPhotoDiv.addEventListener("change", previewImage);
 
-
+function replaceUploadContainerToPreviewContainer (newContainer, oldContainer){
+    newContainer.className = "preview-container";
+    newContainer.appendChild(image);
+    newContainer.style.padding = "0 10px 0 10px";
+    addPhotoDiv.replaceChild(newContainer, oldContainer);
+}
 

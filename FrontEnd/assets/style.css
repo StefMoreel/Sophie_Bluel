@@ -200,18 +200,19 @@ li:hover {
 	flex-direction: column;
 }
 
-#contact-login input, #modal input{
+#contact-login input{
 	height: 36px;
 	font-size: 0.875em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#modal select{
-	height: 36px;
+#modal select, #modal input{
+	height: 50px;
 	font-size: 0.875em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+
 }
 
 #contact-login label {
@@ -333,7 +334,7 @@ footer li{
 	
 }
 
-.btn-close-modal{
+.btn-close-modal-1, .btn-close-modal-2{
 	border: none;
 	background: none;
 	padding: 0;
@@ -341,7 +342,7 @@ footer li{
 	cursor: pointer;
 	top: 25px;
 	right: 30px;
-	font-size: 12px;
+	font-size: 20px;
 }
 .btn-return-modal-1{
 	border: none;
@@ -351,7 +352,7 @@ footer li{
 	cursor: pointer;
 	top: 25px;
 	left: 30px;
-	font-size: 12px;
+	font-size: 21px;
 }
 .title-modals{
 	display: flex;
@@ -369,7 +370,7 @@ footer li{
 	margin: 0;
 	align-self: center;
 	width: 45%;
-
+	height: 36px;
 }
 
 .gallery-modal{
@@ -423,22 +424,31 @@ footer li{
 	display: flex;
 }
 
-.add-photo-file{
+.upload-container, .preview-container{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
 	width: 420px;
 	background-color: rgba(232, 241, 246, 1);
+	gap: 20px;
+	padding: 10px;
 }
+
+.selected-image{
+	width: 129px;
+	height: 193px;
+}
+
 .input-fields-form{
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
-
+	padding-top: 20px;
 }
 .fa-image{
 	font-size: 76px;
+	color: rgba(185, 197, 204, 1);
 }
 .form-add-work-modal-2{
 	display: flex;
@@ -450,8 +460,11 @@ footer li{
 	flex-direction: column;
 }
 #work-title-to-add{
-	width: 100%;
+	width: 100% - 15px;
+	color: rgba(61, 61, 61, 1);
+	padding-left: 15px;
 }
+
 #file{
 	display: none;
 }
@@ -459,4 +472,35 @@ footer li{
 	gap : 20px;
 	display: flex;
 	flex-direction: column;
+}
+.btn-add-photo{
+	color: rgba(48, 102, 133, 1);
+	font-weight: 500;
+	font-size: 14px;
+	width: 150px;
+	text-align: center;
+	background: rgba(185, 197, 204, 1);
+	border-radius: 60px;
+	padding: 10px;
+}
+.info-format-photo{
+	font-size: 10px;
+}
+.footer-modal{
+	display: flex;
+	flex-direction: column;
+	gap: 35px;
+}
+input.submit-add-work-modal-2{
+	background-color: rgba(167, 167, 167, 1);
+}
+.input-fields-form label{
+	color: rgba(61, 61, 61, 1);
+
+}
+.input-fields-form input select{
+	font-size: 14px;
+}
+input[type="text"]{
+	font-size: 20px;
 }
