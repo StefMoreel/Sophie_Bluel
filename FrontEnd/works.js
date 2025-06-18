@@ -40,10 +40,15 @@ function addWork(work, galleryDiv){
     btnTrash.setAttribute("name", work.id);
     //Création de la balise i (icone trash)
     const trashIcon = document.createElement("i");
+    
     trashIcon.className = "fa-solid fa-trash-can icon-trash";
     btnTrash.appendChild(trashIcon);
-    btnTrash.addEventListener("click", onClickBtnTrashDeleteWork);
-
+    btnTrash.addEventListener("click", onClicBtnTrashDeleteWork);
+    
+    //Fonction qui permet de poster un nouveau travail
+    const formAddWork = document.querySelector(".form-add-work-modal-2");
+    //Ajout d'un listener au moment du submit
+    formAddWork.addEventListener("submit", onClicSubmitPostWork);
     
 // Rattacher éléments créés au parent
 
@@ -53,6 +58,7 @@ function addWork(work, galleryDiv){
     figureElement.appendChild(imgElement);
     //Insertion de la balise figcation + affichage élément => enfant de figure
     figureElement.appendChild(figcaptionElement);
+    
     figureElement.appendChild(btnTrash);
 
 
@@ -63,7 +69,7 @@ function addWork(work, galleryDiv){
 function showWorks(worksList, galleryDiv){
     //Effacement de la balise gallery 
     galleryDiv.innerHTML = "";
-    //Parcours des objet de la route works de l'APÏ 
+    //Parcours des objet de la route works de l'API 
     for (let i=0; i < worksList.length ; i++) {
         addWork(worksList[i],galleryDiv);
     }
@@ -76,26 +82,25 @@ async function callApiCategories() {
     const repJson = await reponse.json();
     return repJson;
  }
-    const categories = await callApiCategories();
+const categories = await callApiCategories();
 
+//Création de la balise ul
+const ulElement = document.createElement("ul");
+//Ciblage de l'élément parent pour ul
+const filters = document.querySelector(".filters");
+//Insertion de ul dans filters
+filters.appendChild(ulElement);
 
-    //Création de la balise ul
-    const ulElement = document.createElement("ul");
-    //Ciblage de l'élément parent pour ul
-    const filters = document.querySelector(".filters");
-    //Insertion de ul dans filters
-    filters.appendChild(ulElement);
+//Appel de la fonction pour ajouter 1 bouton "Tous" à la balise ul
+addButtonFilter(ulElement,"Tous", 0);
 
-    //Appel de la fonction pour ajouter 1 bouton "Tous" à la balise ul
-    addButtonFilter(ulElement,"Tous", 0);
+    const selectCategorieForm = document.querySelector("#categories-list");
 
-     const selectCategorieForm = document.querySelector("#categories-list");
-
-    for (let i = 0; i < categories.length ; i++){
-        const category = categories[i]; 
-    addButtonFilter(ulElement, category.name, category.id);
-    createCategorieOptionToSelectInFormPostWork(selectCategorieForm, category.name, category.id);
-    }
+for (let i = 0; i < categories.length ; i++){
+    const category = categories[i]; 
+addButtonFilter(ulElement, category.name, category.id);
+createCategoryOptionToSelectInFormPostWork(selectCategorieForm, category.name, category.id);
+}
 
 function addButtonFilter (parent, categoryName, id){      
     //Création des éléments pour les boutons dynamiques dans le DOM
@@ -143,6 +148,8 @@ const modalTwo = document.querySelector("#modal-2");
 if (isLoggedIn){
     linkLogin.textContent = "logout";
     linkLogin.href="#"
+    //Déconnexion de l'utilisateur
+    //Au clic sur le lien de déconnexion, on supprime le token stocké en local
     linkLogin.addEventListener("click", function(){
         localStorage.removeItem("token");
         window.location.reload();
@@ -169,88 +176,93 @@ if (isLoggedIn){
     divPortfolioSection.appendChild(divOpenModal);
     divOpenModal.appendChild(iconeModifier);
     divOpenModal.appendChild(btnOpenModal);
-
+    btnOpenModal.addEventListener("click", onEventUserOpenModal);
     
-    //Clblage du lien d'ouverture de la modale : bouton "modifier"
-        btnOpenModal.addEventListener("click", function(event){
-            event.preventDefault();
-            //Modification et ajout des attributs de class et CSS
-            modal.style.display = null;
-            modal.removeAttribute('aria-hidden');
-            modal.setAttribute('aria-modal', 'true');
-            modalTwo.classList.remove("active");
-            modalOne.classList.add("active");
+    //fonction qui permet d'ouvrir la modale 1 au clic sur le bouton "modifier"
+    function onEventUserOpenModal(event){
+        event.preventDefault();
+        //Modification et ajout des attributs de class et CSS
+        modal.style.display = null;
+        modal.removeAttribute('aria-hidden');
+        modal.setAttribute('aria-modal', 'true');
+        modalTwo.classList.remove("active");
+        modalOne.classList.add("active");
+        }
 
-
-            
-
-        })
-        // Action de fermeture de la modale 1 et 2
-
-        //Au clic sur la croix modale 1
-        const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
-        btnCloseModalOne.addEventListener("click", OnEventUserCloseModal);
-        //Au clic sur la croix modale 2
-        const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
-        btnCloseModalTwo.addEventListener("click", OnEventUserCloseModal);
-        //Au clic à l'extérieur de la modale
-        const overlayCloseModal = document.querySelector(".modal-overlay");
-        overlayCloseModal.addEventListener("click", OnEventUserCloseModal);
-        //A l'appui sur la touche échap du clavier
-        window.addEventListener("keydown", function(event){
-            if (event.key === "Escape"){
-                OnEventUserCloseModal(event)
-            }
-        });
+    // Action de fermeture de la modale 1 et 2
+    //Au clic sur la croix modale 1
+    const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
+    btnCloseModalOne.addEventListener("click", onEventUserCloseModal);
+    //Au clic sur la croix modale 2
+    const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
+    btnCloseModalTwo.addEventListener("click", onEventUserCloseModal);
+    //Au clic à l'extérieur de la modale
+    const overlayCloseModal = document.querySelector(".modal-overlay");
+    overlayCloseModal.addEventListener("click", onEventUserCloseModal);
+    //A l'appui sur la touche échap du clavier
+    window.addEventListener("keydown", function(event){
+        if (event.key === "Escape"){
+            onEventUserCloseModal(event)
+        }
+    });
 
     showWorks(works, modalGallery);
 
     //Action d'ouverture de la modale 2 au clic sur le bouton "Ajouter photo"
     const btnPostWork = document.querySelector(".btn-open-modal-2");
-    btnPostWork.addEventListener("click", function(event){
+    btnPostWork.addEventListener("click", onEventUserOpenModalTwo);
+
+    function onEventUserOpenModalTwo(event){
         event.preventDefault();
         modalOne.classList.remove("active");
         modalTwo.classList.add("active");
-
-    });
+        };
 
     //Action de retour vers la modale 1
     const btnReturn = document.querySelector(".btn-return-modal-1");
-    btnReturn.addEventListener("click", function() {
-    modalTwo.classList.remove("active");
-    modalOne.classList.add("active");
-    //Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
-    addPhotoDiv.replaceChild(uploadContainer, previewContainer);
-    //Remise à 0 de la sélection de la précédente photo
-    uploadContainer.querySelector("input[type=file]").value = "";
+    btnReturn.addEventListener("click", onEventUserReturnModalOne);
 
-    });
-
+    function onEventUserReturnModalOne() {
+        modalTwo.classList.remove("active");
+        modalOne.classList.add("active");
+        resetFormPostWork()
+        };    
 }
 
+    //Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
+function resetFormPostWork(){    
+    if (previewContainer.parentNode === addPhotoDiv) {
+        addPhotoDiv.replaceChild(uploadContainer, previewContainer);// Si la prévisualisation n'est pas affichée, ne rien faire 
+    }
+    //Remise à 0 de la sélection de la précédente photo
+    uploadContainer.querySelector("input[type=file]").value = "";
+    //Remise à 0 du titre de la photo
+    titlePhotoToAdd.value = "";
+    //Remise à 0 de la catégorie sélectionnée
+    selectCategorieForm.value = "0";
+    //Remise à 0 du style du bouton de soumission
+    btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
+}    
+
 //Dans la modale 2 : ajout des catégories dans la liste d'option
-function createCategorieOptionToSelectInFormPostWork(parent, categoryName, id){
-    
+function createCategoryOptionToSelectInFormPostWork(parent, categoryName, id){
     const optionCategoryElement = document.createElement("option");
     optionCategoryElement.value = id;
     optionCategoryElement.innerText = categoryName;
-   
     parent.appendChild(optionCategoryElement);
-
 }
 
 //Fonction qui décrit l'évenement suite au clic pour fermer les modales
-function OnEventUserCloseModal(event){
+function onEventUserCloseModal(event){
         event.preventDefault();
         modal.style.display = "none";
         modal.setAttribute('aria-hidden', 'true');
         modal.removeAttribute('aria-modal');
+        resetFormPostWork()
 }
 
 //Fonction qui décrit l'évenement suite au clic sur le bouton poubelle de la modale 1
-
-//
-async function onClickBtnTrashDeleteWork(event, id){
+async function onClicBtnTrashDeleteWork(event){
     //Message de demande de confirmation avant suppression
     const isConfirmed = window.confirm("Etes-vous sûr de vouloir supprimer cet élément?")
     //Si clic sur "annuler" le code s'arrête
@@ -259,20 +271,18 @@ async function onClickBtnTrashDeleteWork(event, id){
     }
     //Stockage et renvoie de la string en entier de la valeur du nom de l'attribut du work qui est cliqué
     const workToDelete = parseInt(event.currentTarget.attributes.name.value);
-    
-    
+    //Vérification que l'utilisateur est connecté
     try{ 
         //Récupération du token stocké en local
         const token = localStorage.getItem("token");
         //Appel de la route DELETE de l'API
-        const reponse = await fetch(`http://localhost:5678/api/works/${id}`,{
+        const reponse = await fetch(`http://localhost:5678/api/works/${workToDelete}`,{
             method : "DELETE",
             headers : {
                 'accept': '*/*',
                 'Authorization': `Bearer ${token}`,
                 }
-
-            });
+        });
         //Si l'API renvoie OK    
         if (reponse.ok){
             //Déclaration d'une nouvelle liste
@@ -296,6 +306,7 @@ async function onClickBtnTrashDeleteWork(event, id){
             alert("Erreur lors de la suppression de l'élément");
         }
     }
+    //Instruction à exécuter si l'exécution instruite par try est levée
     catch(error){
         alert("erreur réseau");
     }    
@@ -307,28 +318,124 @@ const image = document.createElement("img");
 image.className = "selected-image";
 const previewContainer = document.createElement("div");
 const uploadContainer = addPhotoDiv.querySelector(".upload-container");
+let selectedImage = "";
 
-function previewImage(eventOnPreview){
+function previewImageModalTwo(eventOnPreview){
     const input = eventOnPreview.target;
-    const selectedFile = input.files[0];
+    const selectedImage = input.files[0];
     if (!input.files[0]){
         return;
     }
-    const reader = new FileReader();
-    reader.onload = function (eventOnPreview){
-        image.src = eventOnPreview.target.result;
+    if (selectedImage.size > 4 * 1024 * 1024) { // 4Mo
+        // Afficher un message d'erreur si le fichier est trop volumineux
+        alert("Le fichier est trop volumineux. Veuillez sélectionner un fichier de moins de 4 Mo.");
+        return;
     }
-    reader.readAsDataURL(selectedFile);
-
-replaceUploadContainerToPreviewContainer(previewContainer, uploadContainer);
+    const reader = new FileReader();
+    reader.onload = function (eventOnLoad){
+        image.src = eventOnLoad.target.result;
+    }   
+    reader.readAsDataURL(selectedImage);
+    replaceUploadContainerToPreviewContainer(previewContainer, uploadContainer);
 }
 
-addPhotoDiv.addEventListener("change", previewImage);
+//Ajout d'un listener sur l'input de type file pour prévisualiser l'image
+addPhotoDiv.addEventListener("change", previewImageModalTwo);
 
+//Fonction qui remplace la div uploadContainer par la div previewContainer
 function replaceUploadContainerToPreviewContainer (newContainer, oldContainer){
     newContainer.className = "preview-container";
     newContainer.appendChild(image);
     newContainer.style.padding = "0 10px 0 10px";
     addPhotoDiv.replaceChild(newContainer, oldContainer);
 }
+
+//Ciblage du champ de saisie du titre de la photo à ajouter
+const titlePhotoToAdd = document.querySelector(".field-title");
+//Ciblage du bouton de soumission de la modale 2
+const btnSubmitPostWork = document.querySelector(".submit-add-work-modal-2");
+
+//Modification du style du bouton de soumission de la modale 2
+function checkFormDataFilledIn(){        
+    const titleFilled = titlePhotoToAdd.value.trim() !== "";
+    const imageFilled = image.src !== "" ;
+    const categorySelected = selectCategorieForm.value !== "0";
+     //Si les champs sont remplis, le bouton devient vert
+    if (titleFilled && imageFilled  && categorySelected){
+            btnSubmitPostWork.style.backgroundColor = "rgba(29, 97, 84, 1)";
+            return true
+        }
+    //Sinon, le bouton reste gris
+    else {
+            btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
+            return false;
+        }
+}
+
+    //Ajout d'un listener sur le champ de saisie du titre de la photo à ajouter
+    titlePhotoToAdd.addEventListener("input", checkFormDataFilledIn);
+    //Ajout d'un listener sur l'image prévisualisée
+    image.addEventListener("change", checkFormDataFilledIn);
+    //Ajout d'un listener sur le select des catégories    
+    selectCategorieForm.addEventListener("change", checkFormDataFilledIn);
+
+//Ajout d'un listener sur le bouton de soumission de la modale 2
+async function onClicSubmitPostWork(event){
+    event.preventDefault();
+    //Vérification que les champs sont remplis
+    if (!checkFormDataFilledIn()){
+        alert("Veuillez remplir tous les champs avant de soumettre le formulaire.");
+        return;
+    }
+    //Message de demande de confirmation avant ajout
+    //Si clic sur "ok" le code continue 
+    const isConfirmed = window.confirm("Etes-vous sûr de vouloir ajouter cet élément?")
+    //Si clic sur "annuler" le code s'arrête
+    if (!isConfirmed){
+        return;
+    }
+    let selectedImage = uploadContainer.querySelector("input[type=file]").files[0];
+    //Récupération du token stocké en local
+    const token = localStorage.getItem("token");
+    //Création de l'objet workToPost
+    const workToPost = {
+        image: selectedImage,
+        title: titlePhotoToAdd.value,
+        category: selectCategorieForm.value
+    }
+    //Création de la charge utile
+    const formData = new FormData();
+    formData.append("image", workToPost.image);
+    formData.append("title", workToPost.title);
+    formData.append("category", workToPost.category);
+
+    //Ajout de l'en-tête Authorization avec le token
+    try{
+        //Appel de la route POST de l'API
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+        });
+        //Si la réponse est OK, on affiche le nouveau travail dans la gallerie principale et dans la modale
+        if (response.ok){
+            const newWork = await response.json();
+            works.push(newWork);
+            showWorks(works, mainGallery);
+            showWorks(works, modalGallery);
+            //Remise à zéro des champs de saisie
+            titlePhotoToAdd.innerText = "";
+            image.src = "";
+            uploadContainer.querySelector("input[type=file]").value = "";
+            addPhotoDiv.replaceChild(uploadContainer, previewContainer);
+        }else{
+            alert("Erreur lors de l'ajout du travail");
+        }
+    //Instruction à exécuter si l'exécution instruite par try est levée    
+    }catch(error){
+        console.error("Erreur réseau :", error);
+    }
+};
 

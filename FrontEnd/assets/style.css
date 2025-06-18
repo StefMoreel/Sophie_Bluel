@@ -209,7 +209,6 @@ li:hover {
 
 #modal select, #modal input{
 	height: 50px;
-	font-size: 0.875em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 
@@ -363,8 +362,11 @@ footer li{
 }
 
 .border{
-	border: solid 1px rgba(179, 179, 179, 1);
+	border: solid 0.5px rgba(179, 179, 179, 1);
 	margin: 0px 55px 0px 55px;
+}
+.border-modal-2{
+	border: solid 0.5px rgba(179, 179, 179, 1);
 }
 #modal input[type=submit]{
 	margin: 0;
@@ -379,7 +381,7 @@ footer li{
 	box-sizing: border-box;
 	gap: 25px 10px;
 	padding: 0px 55px 0 55px;
-	margin-bottom: 30px;
+	margin-bottom: 45px;
 }
 .gallery-modal figcaption{
 	display: none;
@@ -445,6 +447,7 @@ footer li{
 	flex-direction: column;
 	gap: 30px;
 	padding-top: 20px;
+	margin-bottom: 45px;
 }
 .fa-image{
 	font-size: 76px;
@@ -459,10 +462,20 @@ footer li{
 	display: flex;
 	flex-direction: column;
 }
-#work-title-to-add{
-	width: 100% - 15px;
-	color: rgba(61, 61, 61, 1);
+
+input#work-title-to-add{
+	font-size: 14px;
+	font-family: 'Work Sans';
 	padding-left: 15px;
+	font-weight: 400;
+	color: rgba(68, 68, 68, 1);
+}
+select#categories-list{
+	font-size: 14px;
+	font-family: 'Work Sans';
+	padding-left: 15px;
+	font-weight: 400;
+	color: rgba(68, 68, 68, 1);
 }
 
 #file{
@@ -496,11 +509,10 @@ input.submit-add-work-modal-2{
 }
 .input-fields-form label{
 	color: rgba(61, 61, 61, 1);
+	font-weight: 500;
 
 }
 .input-fields-form input select{
 	font-size: 14px;
-}
-input[type="text"]{
-	font-size: 20px;
+
 }
