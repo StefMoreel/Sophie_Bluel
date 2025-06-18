@@ -21,7 +21,7 @@
 //Fonction qui permet de créer les éléments dans le DOM, 
 // de les rattacher à la div parente
 // et d'ajouter 1 travail dans les éléments créés
-function addWork(work, galleryDiv){    
+function addWork(work, galleryDiv){
     // Création des éléments dans le DOM
     // Création de la balise figure
     const figureElement = document.createElement("figure");
@@ -177,71 +177,72 @@ if (isLoggedIn){
     divOpenModal.appendChild(iconeModifier);
     divOpenModal.appendChild(btnOpenModal);
     btnOpenModal.addEventListener("click", onEventUserOpenModal);
-    
-    //fonction qui permet d'ouvrir la modale 1 au clic sur le bouton "modifier"
-    function onEventUserOpenModal(event){
-        event.preventDefault();
-        //Modification et ajout des attributs de class et CSS
-        modal.style.display = null;
-        modal.removeAttribute('aria-hidden');
-        modal.setAttribute('aria-modal', 'true');
-        modalTwo.classList.remove("active");
-        modalOne.classList.add("active");
-        }
+}    
 
-    // Action de fermeture de la modale 1 et 2
-    //Au clic sur la croix modale 1
-    const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
-    btnCloseModalOne.addEventListener("click", onEventUserCloseModal);
-    //Au clic sur la croix modale 2
-    const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
-    btnCloseModalTwo.addEventListener("click", onEventUserCloseModal);
-    //Au clic à l'extérieur de la modale
-    const overlayCloseModal = document.querySelector(".modal-overlay");
-    overlayCloseModal.addEventListener("click", onEventUserCloseModal);
-    //A l'appui sur la touche échap du clavier
-    window.addEventListener("keydown", function(event){
-        if (event.key === "Escape"){
-            onEventUserCloseModal(event)
-        }
-    });
-
-    showWorks(works, modalGallery);
-
-    //Action d'ouverture de la modale 2 au clic sur le bouton "Ajouter photo"
-    const btnPostWork = document.querySelector(".btn-open-modal-2");
-    btnPostWork.addEventListener("click", onEventUserOpenModalTwo);
-
-    function onEventUserOpenModalTwo(event){
-        event.preventDefault();
-        modalOne.classList.remove("active");
-        modalTwo.classList.add("active");
-        };
-
-    //Action de retour vers la modale 1
-    const btnReturn = document.querySelector(".btn-return-modal-1");
-    btnReturn.addEventListener("click", onEventUserReturnModalOne);
-
-    function onEventUserReturnModalOne() {
-        modalTwo.classList.remove("active");
-        modalOne.classList.add("active");
-        resetFormPostWork()
-        };    
+//fonction qui permet d'ouvrir la modale 1 au clic sur le bouton "modifier"
+function onEventUserOpenModal(event){
+    event.preventDefault();
+    //Modification et ajout des attributs de class et CSS
+    modal.style.display = null;
+    modal.removeAttribute('aria-hidden');
+    modal.setAttribute('aria-modal', 'true');
+    modalTwo.classList.remove("active");
+    modalOne.classList.add("active");
 }
 
-    //Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
-function resetFormPostWork(){    
-    if (previewContainer.parentNode === addPhotoDiv) {
-        addPhotoDiv.replaceChild(uploadContainer, previewContainer);// Si la prévisualisation n'est pas affichée, ne rien faire 
+// Action de fermeture de la modale 1 et 2
+//Au clic sur la croix modale 1
+const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
+btnCloseModalOne.addEventListener("click", onEventUserCloseModal);
+//Au clic sur la croix modale 2
+const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
+btnCloseModalTwo.addEventListener("click", onEventUserCloseModal);
+//Au clic à l'extérieur de la modale
+const overlayCloseModal = document.querySelector(".modal-overlay");
+overlayCloseModal.addEventListener("click", onEventUserCloseModal);
+//A l'appui sur la touche échap du clavier
+window.addEventListener("keydown", function(event){
+    if (event.key === "Escape"){
+        onEventUserCloseModal(event)
     }
-    //Remise à 0 de la sélection de la précédente photo
-    uploadContainer.querySelector("input[type=file]").value = "";
-    //Remise à 0 du titre de la photo
-    titlePhotoToAdd.value = "";
-    //Remise à 0 de la catégorie sélectionnée
-    selectCategorieForm.value = "0";
-    //Remise à 0 du style du bouton de soumission
-    btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
+});
+
+showWorks(works, modalGallery);
+
+//Action d'ouverture de la modale 2 au clic sur le bouton "Ajouter photo"
+const btnPostWork = document.querySelector(".btn-open-modal-2");
+btnPostWork.addEventListener("click", onEventUserOpenModalTwo);
+
+function onEventUserOpenModalTwo(event){
+    event.preventDefault();
+    modalOne.classList.remove("active");
+    modalTwo.classList.add("active");
+    };
+
+//Action de retour vers la modale 1
+const btnReturn = document.querySelector(".btn-return-modal-1");
+btnReturn.addEventListener("click", onEventUserReturnModalOne);
+
+function onEventUserReturnModalOne() {
+    modalTwo.classList.remove("active");
+    modalOne.classList.add("active");
+    resetFormPostWork()
+    };    
+
+
+//Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
+function resetFormPostWork(){    
+if (previewContainer.parentNode === addPhotoDiv) {
+    addPhotoDiv.replaceChild(uploadContainer, previewContainer);// Si la prévisualisation n'est pas affichée, ne rien faire 
+}
+//Remise à 0 de la sélection de la précédente photo
+uploadContainer.querySelector("input[type=file]").value = "";
+//Remise à 0 du titre de la photo
+titlePhotoToAdd.value = "";
+//Remise à 0 de la catégorie sélectionnée
+selectCategorieForm.value = "0";
+//Remise à 0 du style du bouton de soumission
+btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
 }    
 
 //Dans la modale 2 : ajout des catégories dans la liste d'option
