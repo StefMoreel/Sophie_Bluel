@@ -1,12 +1,18 @@
+import { onEventUserOpenModal } from "./modal.js";
 
-    //Ciblage de l'élémnent parent
-    const mainGallery = document.querySelector(".gallery");
-    const modalGallery = document.querySelector(".gallery-modal");
-    //const galleryDiv = document.querySelectorAll(".gallery .gallery-modal")
-   
+export let works = [];
+export function getSelectCategorieForm() {
+            return document.querySelector("#categories-list");
+        }
+const mainGallery = document.querySelector(".gallery");
+export const modalGallery = document.querySelector(".gallery-modal");
+const selectCategorieForm = getSelectCategorieForm();
+export const modal = document.querySelector("#modal");
+export const modalOne = document.querySelector("#modal-1");
+export const modalTwo = document.querySelector("#modal-2");
 
  //Fonction qui fait l'appel API de la route GET WORKS et retourne une réponse json
- async function ApiGetWorks() {
+ export async function ApiGetWorks() {
     //Requete de la route works de l'API (GET)
     const reponse = await fetch("http://localhost:5678/api/works");
     //Réponse de la requete au format JSON
@@ -14,14 +20,41 @@
     return repJson;
  }
     //Stockage de la réponse json à GET WORKS
-    let works = await ApiGetWorks();
+    works = await ApiGetWorks();
     //Appel de la fonction d'affichage de chaque work
     showWorks(works, mainGallery);
 
-//Fonction qui permet de créer les éléments dans le DOM, 
+async function ApiGetCategories() {
+    //Requete de la route categories de l'API (GET)
+    const reponse = await fetch("http://localhost:5678/api/categories");
+    //Réponse de la requete au format JSON
+    const repJson = await reponse.json();
+    return repJson;
+ }
+const categories = await ApiGetCategories();
+
+//Création de la balise ul
+const ulElement = document.createElement("ul");
+//Ciblage de l'élément parent pour ul
+const filters = document.querySelector(".filters");
+//Insertion de ul dans filters
+filters.appendChild(ulElement);
+
+//Appel de la fonction pour ajouter 1 bouton "Tous" à la balise ul
+addButtonFilter(ulElement,"Tous", 0);
+
+
+
+for (let i = 0; i < categories.length ; i++){
+    const category = categories[i]; 
+addButtonFilter(ulElement, category.name, category.id);
+createCategoryOptionToSelectInFormPostWork(selectCategorieForm, category.name, category.id);
+}
+
+//Fonction qui permet de créer les éléments dans le DOM,
 // de les rattacher à la div parente
 // et d'ajouter 1 travail dans les éléments créés
-function addWork(work, galleryDiv){
+function createWorkGalleriesDom(work, galleryDiv){
     // Création des éléments dans le DOM
     // Création de la balise figure
     const figureElement = document.createElement("figure");
@@ -45,10 +78,7 @@ function addWork(work, galleryDiv){
     btnTrash.appendChild(trashIcon);
     btnTrash.addEventListener("click", onClicBtnTrashDeleteWork);
     
-    //Fonction qui permet de poster un nouveau travail
-    const formAddWork = document.querySelector(".form-add-work-modal-2");
-    //Ajout d'un listener au moment du submit
-    formAddWork.addEventListener("submit", onClicSubmitPostWork);
+
     
 // Rattacher éléments créés au parent
 
@@ -66,43 +96,16 @@ function addWork(work, galleryDiv){
 
 
 //Fonction qui efface la balise où doivent s'afficher les travaux + affichage des travaux retourés
-function showWorks(worksList, galleryDiv){
+export function showWorks(worksList, galleryDiv){
     //Effacement de la balise gallery 
     galleryDiv.innerHTML = "";
     //Parcours des objet de la route works de l'API 
     for (let i=0; i < worksList.length ; i++) {
-        addWork(worksList[i],galleryDiv);
+        createWorkGalleriesDom(worksList[i],galleryDiv);
     }
 }
 
-async function ApiGetCategories() {
-    //Requete de la route categories de l'API (GET)
-    const reponse = await fetch("http://localhost:5678/api/categories");
-    //Réponse de la requete au format JSON
-    const repJson = await reponse.json();
-    return repJson;
- }
-const categories = await ApiGetCategories();
-
-//Création de la balise ul
-const ulElement = document.createElement("ul");
-//Ciblage de l'élément parent pour ul
-const filters = document.querySelector(".filters");
-//Insertion de ul dans filters
-filters.appendChild(ulElement);
-
-//Appel de la fonction pour ajouter 1 bouton "Tous" à la balise ul
-addButtonFilter(ulElement,"Tous", 0);
-
-    const selectCategorieForm = document.querySelector("#categories-list");
-
-for (let i = 0; i < categories.length ; i++){
-    const category = categories[i]; 
-addButtonFilter(ulElement, category.name, category.id);
-createCategoryOptionToSelectInFormPostWork(selectCategorieForm, category.name, category.id);
-}
-
-function addButtonFilter (parent, categoryName, id){      
+export function addButtonFilter (parent, categoryName, id){      
     //Création des éléments pour les boutons dynamiques dans le DOM
     //Création de la balise li
     const liElement = document.createElement("li");
@@ -136,14 +139,11 @@ function addButtonFilter (parent, categoryName, id){
     });
 
  }
-
 //Affichage de la page après la connexion
 
 const isLoggedIn = localStorage.getItem("token");
 const linkLogin = document.querySelector(".link-login");
-const modal = document.querySelector("#modal");
-const modalOne = document.querySelector("#modal-1");
-const modalTwo = document.querySelector("#modal-2");
+
 
 if (isLoggedIn){
     linkLogin.textContent = "logout";
@@ -164,160 +164,33 @@ if (isLoggedIn){
     const iconeModifier = document.createElement("i");
     //Ajout de l'attribut class de la balise i pour afficher l'icone
     iconeModifier.className = "fa-regular fa-pen-to-square";
-    //Création de la balise button pour acceder à la modale
+    
+//Création de la balise button pour acceder à la modale
+function createButtonOpenModal() {
     const btnOpenModal = document.createElement("button");
     //Ajout de l'attribut de classe de la balise a pour identifier la fonction du button
     btnOpenModal.className = "btn-open-modal-1"
     //Ajout du texte à afficher dans le bouton
     btnOpenModal.innerText = "modifier";
     //Ciblage de la balise parente
-    const divPortfolioSection = document.querySelector(".title-portfolio")
+    const divPortfolioSection = document.querySelector(".title-portfolio");
     //Attachement des baslisent créées au parent
     divPortfolioSection.appendChild(divOpenModal);
     divOpenModal.appendChild(iconeModifier);
     divOpenModal.appendChild(btnOpenModal);
     btnOpenModal.addEventListener("click", onEventUserOpenModal);
-} 
-
-//Fonction qui piège le focus dans la modale
-//Permet de garder le focus dans la modale pour l'accessibilité
-function trapFocus(modal) { 
-    const focusables = modal.querySelectorAll(
-        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusables.length === 0) return;
-
-    const firstFocusable = focusables[0];
-    const lastFocusable = focusables[focusables.length - 1];
-
-    function handleTab(e) {
-        if (e.key !== "Tab") return;
-        if (focusables.length === 1) {
-            e.preventDefault();
-            firstFocusable.focus();
-            return;
-        }
-        if (!e.shiftKey && document.activeElement === lastFocusable) {
-            e.preventDefault();
-            firstFocusable.focus();
-        }
-        if (e.shiftKey && document.activeElement === firstFocusable) {
-            e.preventDefault();
-            lastFocusable.focus();
-        }
-    }
-
-    modal.addEventListener("keydown", handleTab);
-    setTimeout(() => firstFocusable.focus(), 10);
-
-    // On retourne une fonction pour détacher l'event quand on ferme la modale
-    return function untrap() {
-        modal.removeEventListener("keydown", handleTab);
-    };
-}
-
-let untrapFocusModalOne = null;
-let untrapFocusModalTwo = null;
-let lastFocusedElement = null;
-
-//fonction qui permet d'ouvrir la modale 1 au clic sur le bouton "modifier"
-function onEventUserOpenModal(event){
-    event.preventDefault();
-    //Modification et ajout des attributs de class et CSS
-    modal.style.display = null;
-    modal.removeAttribute('aria-hidden');
-    modal.setAttribute('aria-modal', 'true');
-    modalTwo.classList.remove("active");
-    modalOne.classList.add("active");
-
-    if (untrapFocusModalTwo) { untrapFocusModalTwo(); }
-    untrapFocusModalOne = trapFocus(modalOne);
-}
-
-// Action de fermeture de la modale 1 et 2
-//Au clic sur la croix modale 1
-const btnCloseModalOne = document.querySelector(".btn-close-modal-1");
-btnCloseModalOne.addEventListener("click", onEventUserCloseModal);
-//Au clic sur la croix modale 2
-const btnCloseModalTwo = document.querySelector(".btn-close-modal-2");
-btnCloseModalTwo.addEventListener("click", onEventUserCloseModal);
-//Au clic à l'extérieur de la modale
-const overlayCloseModal = document.querySelector(".modal-overlay");
-overlayCloseModal.addEventListener("click", onEventUserCloseModal);
-//A l'appui sur la touche échap du clavier
-window.addEventListener("keydown", function(event){
-    if (event.key === "Escape"){
-        onEventUserCloseModal(event)
-    }
-});
-
-showWorks(works, modalGallery);
-
-//Action d'ouverture de la modale 2 au clic sur le bouton "Ajouter photo"
-const btnPostWork = document.querySelector(".btn-open-modal-2");
-btnPostWork.addEventListener("click", onEventUserOpenModalTwo);
-
-function onEventUserOpenModalTwo(event){
-    event.preventDefault();
-    modalOne.classList.remove("active");
-    modalTwo.classList.add("active");
-
-    if (untrapFocusModalOne) { untrapFocusModalOne(); }
-    untrapFocusModalTwo = trapFocus(modalTwo);
-    };
-
-//Action de retour vers la modale 1
-const btnReturn = document.querySelector(".btn-return-modal-1");
-btnReturn.addEventListener("click", onEventUserReturnModalOne);
-
-function onEventUserReturnModalOne() {
-    modalTwo.classList.remove("active");
-    modalOne.classList.add("active");
-    resetFormPostWork()
-
-    if (untrapFocusModalTwo) { untrapFocusModalTwo(); }
-    untrapFocusModalOne = trapFocus(modalOne);
-    };    
-
-
-//Remplacement de la div de prévisualisation de la photo par la div pour l'ajout d'une photo
-function resetFormPostWork(){    
-if (previewContainer.parentNode === addPhotoDiv) {
-    addPhotoDiv.replaceChild(uploadContainer, previewContainer);// Si la prévisualisation n'est pas affichée, ne rien faire 
-}
-//Remise à 0 de la sélection de la précédente photo
-uploadContainer.querySelector("input[type=file]").value = "";
-//Remise à 0 du titre de la photo
-titlePhotoToAdd.value = "";
-//Remise à 0 de la catégorie sélectionnée
-selectCategorieForm.value = "0";
-//Remise à 0 du style du bouton de soumission
-btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
+    return btnOpenModal;
 }    
 
-//Dans la modale 2 : ajout des catégories dans la liste d'option
-function createCategoryOptionToSelectInFormPostWork(parent, categoryName, id){
+createButtonOpenModal();
+}
+
+ //Dans la modale 2 : ajout des catégories dans la liste d'option
+export function createCategoryOptionToSelectInFormPostWork(parent, categoryName, id){
     const optionCategoryElement = document.createElement("option");
     optionCategoryElement.value = id;
     optionCategoryElement.innerText = categoryName;
     parent.appendChild(optionCategoryElement);
-}
-
-//Fonction qui décrit l'évenement suite au clic pour fermer les modales
-function onEventUserCloseModal(event){
-    event.preventDefault();
-    modal.style.display = "none";
-    modal.setAttribute('aria-hidden', 'true');
-    modal.removeAttribute('aria-modal');
-    resetFormPostWork()
-
-    if (untrapFocusModalOne) { untrapFocusModalOne(); }
-    if (untrapFocusModalTwo) { untrapFocusModalTwo(); }
-
-    if (lastFocusedElement) {
-        lastFocusedElement.focus();
-        lastFocusedElement = null;
-    }
 }
 
 //Fonction qui décrit l'évenement suite au clic sur le bouton poubelle de la modale 1
@@ -370,75 +243,13 @@ async function onClicBtnTrashDeleteWork(event){
         alert("erreur réseau");
     }    
 }
-    
 
-const addPhotoDiv = document.querySelector(".add-photo-file");
-const image = document.createElement("img");
-image.className = "selected-image";
-const previewContainer = document.createElement("div");
-const uploadContainer = addPhotoDiv.querySelector(".upload-container");
-let selectedImage = "";
+//Fonction qui permet de poster un nouveau travail
+const formAddWork = document.querySelector(".form-add-work-modal-2");
+//Ajout d'un listener au moment du submit
+formAddWork.addEventListener("submit", onClicSubmitPostWork);
 
-function previewImageModalTwo(eventOnPreview){
-    const input = eventOnPreview.target;
-    const selectedImage = input.files[0];
-    if (!input.files[0]){
-        return;
-    }
-    if (selectedImage.size > 4 * 1024 * 1024) { // 4Mo
-        // Afficher un message d'erreur si le fichier est trop volumineux
-        alert("Le fichier est trop volumineux. Veuillez sélectionner un fichier de moins de 4 Mo.");
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = function (eventOnLoad){
-        image.src = eventOnLoad.target.result;
-    }   
-    reader.readAsDataURL(selectedImage);
-    replaceUploadContainerToPreviewContainer(previewContainer, uploadContainer);
-}
-
-//Ajout d'un listener sur l'input de type file pour prévisualiser l'image
-addPhotoDiv.addEventListener("change", previewImageModalTwo);
-
-//Fonction qui remplace la div uploadContainer par la div previewContainer
-function replaceUploadContainerToPreviewContainer (newContainer, oldContainer){
-    newContainer.className = "preview-container";
-    newContainer.appendChild(image);
-    newContainer.style.padding = "0 10px 0 10px";
-    addPhotoDiv.replaceChild(newContainer, oldContainer);
-}
-
-//Ciblage du champ de saisie du titre de la photo à ajouter
-const titlePhotoToAdd = document.querySelector(".field-title");
-//Ciblage du bouton de soumission de la modale 2
-const btnSubmitPostWork = document.querySelector(".submit-add-work-modal-2");
-
-//Modification du style du bouton de soumission de la modale 2
-function checkFormDataFilledIn(){        
-    const titleFilled = titlePhotoToAdd.value.trim() !== "";
-    const imageFilled = image.src !== "" ;
-    const categorySelected = selectCategorieForm.value !== "0";
-     //Si les champs sont remplis, le bouton devient vert
-    if (titleFilled && imageFilled  && categorySelected){
-            btnSubmitPostWork.style.backgroundColor = "rgba(29, 97, 84, 1)";
-            return true
-        }
-    //Sinon, le bouton reste gris
-    else {
-            btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
-            return false;
-        }
-}
-
-    //Ajout d'un listener sur le champ de saisie du titre de la photo à ajouter
-    titlePhotoToAdd.addEventListener("input", checkFormDataFilledIn);
-    //Ajout d'un listener sur l'image prévisualisée
-    image.addEventListener("change", checkFormDataFilledIn);
-    //Ajout d'un listener sur le select des catégories    
-    selectCategorieForm.addEventListener("change", checkFormDataFilledIn);
-
-//Ajout d'un listener sur le bouton de soumission de la modale 2
+    //Ajout d'un listener sur le bouton de soumission de la modale 2
 async function onClicSubmitPostWork(event){
     event.preventDefault();
     //Vérification que les champs sont remplis
@@ -497,6 +308,3 @@ async function onClicSubmitPostWork(event){
         console.error("Erreur réseau :", error);
     }
 };
-
-
-
