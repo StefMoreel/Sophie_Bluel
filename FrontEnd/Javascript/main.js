@@ -21,7 +21,7 @@
 //Fonction qui permet de créer les éléments dans le DOM, 
 // de les rattacher à la div parente
 // et d'ajouter 1 travail dans les éléments créés
-function addWork(work, galleryDiv){
+function createWorkGalleriesDom(work, galleryDiv){
     // Création des éléments dans le DOM
     // Création de la balise figure
     const figureElement = document.createElement("figure");
@@ -46,9 +46,9 @@ function addWork(work, galleryDiv){
     btnTrash.addEventListener("click", onClicBtnTrashDeleteWork);
     
     //Fonction qui permet de poster un nouveau travail
-    const formAddWork = document.querySelector(".form-add-work-modal-2");
+    const formcreateWorkGalleriesDom = document.querySelector(".form-add-work-modal-2");
     //Ajout d'un listener au moment du submit
-    formAddWork.addEventListener("submit", onClicSubmitPostWork);
+    formcreateWorkGalleriesDom.addEventListener("submit", onClicSubmitPostWork);
     
 // Rattacher éléments créés au parent
 
@@ -71,7 +71,7 @@ function showWorks(worksList, galleryDiv){
     galleryDiv.innerHTML = "";
     //Parcours des objet de la route works de l'API 
     for (let i=0; i < worksList.length ; i++) {
-        addWork(worksList[i],galleryDiv);
+        createWorkGalleriesDom(worksList[i],galleryDiv);
     }
 }
 
@@ -158,26 +158,28 @@ if (isLoggedIn){
     document.querySelector(".filters").innerHTML = ""
 
     //Création de la div openModal
-    const divOpenModal = document.createElement("div");
-    divOpenModal.className = "openModal";
-    //Création de la balise i pour l'icone
-    const iconeModifier = document.createElement("i");
-    //Ajout de l'attribut class de la balise i pour afficher l'icone
-    iconeModifier.className = "fa-regular fa-pen-to-square";
-    //Création de la balise button pour acceder à la modale
-    const btnOpenModal = document.createElement("button");
-    //Ajout de l'attribut de classe de la balise a pour identifier la fonction du button
-    btnOpenModal.className = "btn-open-modal-1"
-    //Ajout du texte à afficher dans le bouton
-    btnOpenModal.innerText = "modifier";
-    //Ciblage de la balise parente
-    const divPortfolioSection = document.querySelector(".title-portfolio")
-    //Attachement des baslisent créées au parent
-    divPortfolioSection.appendChild(divOpenModal);
-    divOpenModal.appendChild(iconeModifier);
-    divOpenModal.appendChild(btnOpenModal);
-    btnOpenModal.addEventListener("click", onEventUserOpenModal);
-} 
+     const divOpenModal = document.createElement("div");
+     divOpenModal.className = "openModal";
+     //Création de la balise i pour l'icone
+     const iconeModifier = document.createElement("i");
+     //Ajout de l'attribut class de la balise i pour afficher l'icone
+     iconeModifier.className = "fa-regular fa-pen-to-square";
+     //Création de la balise button pour acceder à la modale
+     const btnOpenModal = document.createElement("button");
+     //Ajout de l'attribut de classe de la balise a pour identifier la fonction du button
+     btnOpenModal.className = "btn-open-modal-1"
+     //Ajout du texte à afficher dans le bouton
+     btnOpenModal.innerText = "modifier";
+     //Ciblage de la balise parente
+     const divPortfolioSection = document.querySelector(".title-portfolio")
+     //Attachement des baslisent créées au parent
+     divPortfolioSection.appendChild(divOpenModal);
+     divOpenModal.appendChild(iconeModifier);
+     divOpenModal.appendChild(btnOpenModal);
+     btnOpenModal.addEventListener("click", onEventUserOpenModal);
+}
+
+
 
 //Fonction qui piège le focus dans la modale
 //Permet de garder le focus dans la modale pour l'accessibilité
@@ -219,6 +221,9 @@ function trapFocus(modal) {
 let untrapFocusModalOne = null;
 let untrapFocusModalTwo = null;
 let lastFocusedElement = null;
+
+const btnOpenModalOne = document.querySelector(".btn-open-modal-1");
+btnOpenModalOne.addEventListener("click", onEventUserOpenModal);
 
 //fonction qui permet d'ouvrir la modale 1 au clic sur le bouton "modifier"
 function onEventUserOpenModal(event){
@@ -485,10 +490,13 @@ async function onClicSubmitPostWork(event){
             showWorks(works, mainGallery);
             showWorks(works, modalGallery);
             //Remise à zéro des champs de saisie
-            titlePhotoToAdd.innerText = "";
+            titlePhotoToAdd.value = null;
+            selectCategorieForm.value = "0";
             image.src = "";
             uploadContainer.querySelector("input[type=file]").value = "";
             addPhotoDiv.replaceChild(uploadContainer, previewContainer);
+            window.location.href = "index.html";
+            alert("Projet ajouté avec succès");
         }else{
             alert("Erreur lors de l'ajout du travail");
         }
