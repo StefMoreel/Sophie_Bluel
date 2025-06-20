@@ -44,7 +44,7 @@
 		<div class="title-portfolio">
 			<h2>Mes projets</h2>
 			<!--Affichage du lien pour accéder à la modale d'ajout et de suppression de travaux-->
-			<div class="openModal" aria-hidden="true" role="button" aria-label="Ouvrir la modale d'ajout de travaux" style="display: none;">
+			<div class="openModal" aria-hidden="true" aria-label="Ouvrir la modale d'ajout de travaux" style="display: none;">
 				<i class="fa-regular fa-pen-to-square"></i>
 				<button class="btn-open-modal-1">modifier</button>
 			</div>
@@ -55,12 +55,12 @@
 		<div class="gallery">
 			<!--Affichage de la gallerie-->
 		</div>
-		<div id="modal" aria-hidden="true" role="dialog" style="display:none;" aria-labelledby="title-modal">
+		<div id="modal" aria-hidden="true" role="dialog" style="display:none;" aria-labelledby="title-modals-1">
 			<div class="modal-overlay"></div>
 			<div class="modal-container">
 				<div id="modal-1" class="modal active">
 					<button class="btn-close-modal-1"><i class="fa-solid fa-xmark"></i></button>
-					<div class="title-modals">
+					<div class="title-modals" id="title-modals-1">
 						<p>Galerie photo</p>
 					</div>
 					<div class="gallery-modal">
@@ -78,7 +78,7 @@
 						<p>Ajout photo</p>
 					</div>
 					<div class="form-add-work-modal-2">
-						<form action="" method="post" class="form-post-work">
+						<form action="http://localhost:5678/api/works" method="post" class="form-post-work">
 							<div class="add-photo-file">
 								<div class="upload-container">	
 									<i class="fa-regular fa-image"></i>
@@ -95,7 +95,7 @@
 								<div class="input-categories">
 									<label for="categories-list" id="categorie">Catégorie</label>
 									<select name="categories-id" id="categories-list">
-										<option value="0"></option>
+										<option value="" selected disabled hidden>&nbsp;</option>
 									</select>
 								</div>
 							</div>
@@ -112,7 +112,7 @@
 	<section id="contact-login">
 		<h2>Contact</h2>
 		<p>Vous avez un projet ? Discutons-en !</p>
-		<form action="http://localhost:5678/api/works" method="post">
+		<form method="post">
 			<label for="name">Nom</label>
 			<input type="text" name="name" id="name">
 			<label for="email">E-mail</label>

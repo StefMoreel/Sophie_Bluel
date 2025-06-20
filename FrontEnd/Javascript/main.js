@@ -295,7 +295,7 @@ uploadContainer.querySelector("input[type=file]").value = "";
 //Remise à 0 du titre de la photo
 titlePhotoToAdd.value = "";
 //Remise à 0 de la catégorie sélectionnée
-selectCategorieForm.value = "0";
+selectCategorieForm.value = "";
 //Remise à 0 du style du bouton de soumission
 btnSubmitPostWork.style.backgroundColor = "rgba(167, 167, 167, 1)";
 }    
@@ -423,7 +423,7 @@ const btnSubmitPostWork = document.querySelector(".submit-add-work-modal-2");
 function checkFormDataFilledIn(){        
     const titleFilled = titlePhotoToAdd.value.trim() !== "";
     const imageFilled = image.src !== "" ;
-    const categorySelected = selectCategorieForm.value !== "0";
+    const categorySelected = selectCategorieForm.value > 0;
      //Si les champs sont remplis, le bouton devient vert
     if (titleFilled && imageFilled  && categorySelected){
             btnSubmitPostWork.style.backgroundColor = "rgba(29, 97, 84, 1)";
@@ -491,7 +491,7 @@ async function onClicSubmitPostWork(event){
             showWorks(works, modalGallery);
             //Remise à zéro des champs de saisie
             titlePhotoToAdd.value = null;
-            selectCategorieForm.value = "0";
+            selectCategorieForm.value = "";
             image.src = "";
             uploadContainer.querySelector("input[type=file]").value = "";
             addPhotoDiv.replaceChild(uploadContainer, previewContainer);
